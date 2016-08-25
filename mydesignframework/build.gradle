@@ -1,0 +1,91 @@
+apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
+apply plugin: 'com.neenbedankt.android-apt' // 注释处理
+//GreenDao
+apply plugin: 'org.greenrobot.greendao'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.1"
+
+    defaultConfig {
+        applicationId "com.vv.mydesignframework"
+        minSdkVersion 15
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+        //是否分包
+        multiDexEnabled true
+    }
+    buildTypes {
+
+        //发布版本
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    dexOptions {
+        incremental true
+        javaMaxHeapSize "4g"
+        //预编译
+        preDexLibraries = false
+    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            output.outputFile = new File(output.outputFile.parent, defaultConfig.applicationId + "-"
+                    + buildType.name + "-v" + defaultConfig.versionName + "-" + defaultConfig.versionCode + ".apk");
+        }
+    }
+
+}
+greendao {//greendao配置
+    targetGenDir 'src/main/java/'
+    schemaVersion 1;
+}
+
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:24.2.0'
+    compile 'com.android.support:support-v4:24.2.0'
+    compile 'com.android.support:design:24.2.0'
+    compile 'com.android.support:palette-v7:24.2.0'
+    compile 'com.android.support:recyclerview-v7:24.2.0'
+    //分包
+    compile 'com.android.support:multidex:1.0.1'
+    //Butter Knife
+    compile 'com.jakewharton:butterknife:8.2.1'
+    apt 'com.jakewharton:butterknife-compiler:8.2.1'
+    //Retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    //Gson
+    compile 'com.google.code.gson:gson:2.6.2'
+    //Rx
+    compile 'io.reactivex:rxandroid:1.1.0'
+    compile 'io.reactivex:rxjava:1.1.5'
+    //EventBus
+    compile 'org.greenrobot:eventbus:3.0.0'
+    //Dagger2
+    provided 'javax.annotation:javax.annotation-api:1.2'
+    compile 'com.google.dagger:dagger:2.0.2'
+    apt 'com.google.dagger:dagger-compiler:2.0.2'
+    //GreenDao
+    compile 'org.greenrobot:greendao:3.0.1'
+    //Glide工具类
+    //    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'jp.wasabeef:glide-transformations:2.0.1'
+    //supreAdapter
+    compile 'org.byteam.superadapter:superadapter:2.2.4'
+    //FileDownloader
+    compile 'com.liulishuo.filedownloader:library:0.2.0'
+    //LeakCanary
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+
+}
